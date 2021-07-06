@@ -2,18 +2,23 @@ require('dotenv').config();
 const LoggerSingleton = require('../lib/LoggerSingleton');
 const logger = new LoggerSingleton().getInstance();
 const dbToConnect = require('./connector.json');
+const fs = require('fs');
 
 class DbController {
     constructor() {
-        this.logger = logger;
         try {
+            if (process.env.NODE_ENV === 'development') {
+                if (!fs.existsSync(process.env.DB_SQLITE_FOLDER)) {
+                    fs.mkdirSync(process.env.DB_SQLITE_FOLDER);
+                }
+            }
             this.db = require('knex')(dbToConnect[process.env.NODE_ENV]);
             this.initTable();
         } catch (error) {
-            this.logger.error(`Error trying to connect database: ${JSON.stringify(error)}`)
+            logger.error(`Error trying to connect database: ${JSON.stringify(error)}`)
         }
     }
-    
+
     async initTable() {
         try {
             const exists = await this.db.schema.hasTable(process.env.DB_TABLE);
