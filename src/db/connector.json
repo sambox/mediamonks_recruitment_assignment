@@ -1,0 +1,20 @@
+{
+    "development": {
+        "client": "sqlite3",
+        "connection": {
+            "filename": "./dbData/mmra.db"
+        },
+        "useNullAsDefault": true
+    },
+    "production":{
+        "client": "mysql",
+        "connection": {
+          "host" : "127.0.0.1",
+          "user" : "root",
+          "password" : "root",
+          "port": 33060,
+          "protocol": "tcp",
+          "database" : "sam_mmra"
+        }
+      }
+}
